@@ -1,0 +1,227 @@
+{
+	"info": {
+		"_postman_id": "d62e0786-eacc-489d-975e-ede5009e32d4",
+		"name": "DeliGo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1287823"
+	},
+	"item": [
+		{
+			"name": "CreateUser-Admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Admin User\",\r\n  \"email\": \"admin@example.com\",\r\n  \"password\": \"123456\",\r\n  \"type\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Pega a resposta da requisição e salva token\r",
+							"const response = pm.response.json();\r",
+							"pm.collectionVariables.set('deligo_token', response.token);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"admin@example.com\",\r\n  \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "healthcheck",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateProduct",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{deligo_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"hamburger de gergelim\",\r\n    \"description\": \"O melhor hamburger artesanal da região.\",\r\n    \"price\": 56.77,\r\n    \"category\": \"FOOD\",\r\n    \"ingredients\":[\"Pão especial\",\"Carne artesanal\", \"Picles\", \"Ovo\", \"Molho da casa\"],\r\n    \"imageUrl\": \"https://media.istockphoto.com/id/2185993729/pt/foto/advertising-concepts-of-skin-care-cosmetics-with-cream-in-jar-serum-and-moisturizer.jpg?s=1024x1024&w=is&k=20&c=27ZfQylH04KNFe0A5JW1vDtuirIx80KTACH8nWLDmsc=\",\r\n    \"isAvailable\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AllProducts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product-Id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{deligo_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/products/00a1c7e6-e731-4560-9560-c0e36e7f95d4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"products",
+						"00a1c7e6-e731-4560-9560-c0e36e7f95d4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pedido Cartao",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{deligo_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"items\": [\r\n    {\r\n      \"productId\": \"123e4567-e89b-12d3-a456-426614174000\",\r\n      \"quantity\": 2\r\n    }\r\n  ],\r\n  \"paymentMethod\": \"CREDIT_CARD\",\r\n  \"creditCard\": {\r\n    \"cardNumber\": \"4532 1234 5678 9012\",\r\n    \"expiryDate\": \"12/25\",\r\n    \"cvv\": \"123\",\r\n    \"cardholderName\": \"João Silva\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "deligo_token",
+			"value": ""
+		}
+	]
+}
